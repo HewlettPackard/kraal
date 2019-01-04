@@ -1,5 +1,7 @@
 # Kraal #
 
+[![Build Status](https://travis-ci.org/HewlettPackard/kraal.svg?branch=master)](https://travis-ci.org/HewlettPackard/kraal)
+
 Attempting to use [GraalVM](https://www.graalvm.org/) and [Kotlin](http://kotlinlang.org/)
 [coroutines](http://kotlinlang.org/docs/reference/coroutines-overview.html) together fails due to a
 [limitation of GraalVM](https://github.com/oracle/graal/issues/366) - it cannot handle some perfectly valid
