@@ -14,17 +14,23 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+import com.jfrog.bintray.gradle.BintrayExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.Date
 
 plugins {
     kotlin("jvm") version "1.3.11"
+    id("org.jetbrains.dokka") version "0.9.17"
+    id("com.jfrog.bintray") version "1.8.4"
     id("io.gitlab.arturbosch.detekt") version "1.0.0-RC11"
+    `maven-publish`
 }
 
-description = "Kraal parent module"
+description = "Kraal parent module - Kraal enables the use of Kotlin coroutines and GraalVM native-image together"
 
 allprojects {
     group = "com.hpe.kraal"
@@ -38,6 +44,9 @@ allprojects {
 
 subprojects {
     apply(plugin = "kotlin")
+    apply(plugin = "org.jetbrains.dokka")
+    apply(plugin = "maven-publish")
+    apply(plugin = "com.jfrog.bintray")
 
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
@@ -65,6 +74,84 @@ subprojects {
             showCauses = true
             showStackTraces = true
         }
+    }
+
+    tasks.withType(DokkaTask::class.java) {
+        // lots of Can't find node warnings, possibly: https://github.com/Kotlin/dokka/issues/319
+        reportUndocumented = false
+        outputFormat = "javadoc"
+        outputDirectory = "$buildDir/javadoc"
+    }
+
+    val sourcesJar by tasks.creating(Jar::class) {
+        dependsOn("classes")
+        classifier = "sources"
+        from(sourceSets["main"].allSource)
+    }
+
+    val javadocJar by tasks.creating(Jar::class) {
+        dependsOn("dokka")
+        classifier = "javadoc"
+        from(buildDir.resolve("javadoc"))
+    }
+
+    artifacts {
+        add("archives", sourcesJar)
+        add("archives", javadocJar)
+    }
+
+    publishing {
+        publications.create<MavenPublication>("KraalPublication") {
+            from(components["java"])
+            artifact(sourcesJar)
+            artifact(javadocJar)
+            groupId = "${this@subprojects.group}"
+            artifactId = this@subprojects.name
+            version = "${this@subprojects.version}"
+            pom.withXml {
+                asNode().apply {
+                    appendNode("description", "${this@subprojects.description}")
+                    appendNode("name", "kraal")
+                    appendNode("url", "https://github.com/HewlettPackard/kraal")
+
+                    val license = appendNode("licenses").appendNode("license")
+                    license.appendNode("name", "MIT")
+                    license.appendNode("url", "https://opensource.org/licenses/MIT")
+                    license.appendNode("distribution", "repo")
+
+                    val developer = appendNode("developers").appendNode("developer")
+                    developer.appendNode("id", "Brad Newman")
+                    developer.appendNode("name", "Brad Newman")
+                    developer.appendNode("organization", "Hewlett Packard Enterprise")
+                    developer.appendNode("organizationUrl", "https://hpe.com")
+
+                    appendNode("scm").appendNode("url", "https://github.com/HewlettPackard/kraal")
+                }
+            }
+        }
+    }
+
+    bintray {
+        user = "${properties["bintray.publish.user"]}"
+        key = "${properties["bintray.publish.key"]}"
+
+        setPublications("KraalPublication")
+
+        pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
+            repo = "kraal"
+            name = "kraal"
+            setLicenses("MIT")
+            vcsUrl = "https://github.com/HewlettPackard/kraal"
+
+            version(delegateClosureOf<BintrayExtension.VersionConfig> {
+                name = "${project.version}"
+                released = "${Date()}"
+
+                gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
+                    sign = true
+                })
+            })
+        })
     }
 }
 

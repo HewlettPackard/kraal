@@ -31,4 +31,3 @@ dependencies {
     testImplementation("io.ktor:ktor-network")
     testImplementation("io.ktor:ktor-utils")
 }
-
