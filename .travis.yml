@@ -14,4 +14,5 @@ deploy:
   repo: HewlettPackard/kraal
   on:
     jdk: openjdk8
+    tags: true
     condition: $TRAVIS_TAG = v*
