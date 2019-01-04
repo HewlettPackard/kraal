@@ -24,7 +24,7 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             when (requested.id.id) {
-                "com.hpe.kraal" -> useModule("com.hpe.kraal:gradle-plugin:0.0.1-SNAPSHOT") // version doesn't matter
+                "com.hpe.kraal" -> useModule("com.hpe.kraal:gradle-plugin:0.0.1") // version doesn't matter?
             }
         }
     }
