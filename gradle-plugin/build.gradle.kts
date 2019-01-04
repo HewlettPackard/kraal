@@ -16,6 +16,7 @@
  */
 plugins {
     id("java-gradle-plugin")
+    id("com.gradle.plugin-publish") version "0.10.0"
 }
 
 dependencies {
@@ -23,11 +24,18 @@ dependencies {
     implementation(project(":kraal"))
 }
 
+pluginBundle {
+    website = "https://github.com/HewlettPackard/kraal"
+    vcsUrl = "https://github.com/HewlettPackard/kraal"
+    tags = listOf("kotlin", "coroutines", "graal", "graalvm", "graal-native", "native-image")
+}
 gradlePlugin {
     plugins {
         create("kraalPlugin") {
             id = "com.hpe.kraal"
             implementationClass = "com.hpe.kraal.gradle.KraalPlugin"
+            displayName = "Kraal Plugin"
+            description = "Enables the use of Kotlin coroutines and GraalVM native-image together"
         }
     }
 }
