@@ -28,7 +28,7 @@ description = "Kraal parent module"
 
 allprojects {
     group = "com.hpe.kraal"
-    version = "0.0.2-SNAPSHOT"
+    version = "0.0.2"
 
     repositories {
         jcenter()
