@@ -413,6 +413,8 @@ style:
     conversionFunctionPrefix: 'to'
   EqualsNullCall:
     active: true
+  EqualsOnSignatureLine:
+    active: true
   ExplicitItLambdaParameter:
     active: true
   ExpressionBodySyntax:
@@ -477,6 +479,8 @@ style:
     active: false
     max: 2
     excludedFunctions: "equals"
+    excludeLabeled: false
+    excludeReturnFromLambda: true
   SafeCast:
     active: true
   SerialVersionUIDInSerializableClass:

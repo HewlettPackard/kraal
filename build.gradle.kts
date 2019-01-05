@@ -26,7 +26,7 @@ plugins {
     kotlin("jvm") version "1.3.11"
     id("org.jetbrains.dokka") version "0.9.17"
     id("com.jfrog.bintray") version "1.8.4"
-    id("io.gitlab.arturbosch.detekt") version "1.0.0-RC11"
+    id("io.gitlab.arturbosch.detekt") version "1.0.0-RC12"
     `maven-publish`
 }
 
@@ -185,10 +185,10 @@ allprojects {
         implementation("io.ktor:ktor-client-apache:1.0.1")
         implementation("io.ktor:ktor-server-test-host:1.0.1")
 
-        implementation("io.gitlab.arturbosch.detekt:detekt-core:1.0.0-RC11")
-        implementation("io.gitlab.arturbosch.detekt:detekt-api:1.0.0-RC11")
-        implementation("io.gitlab.arturbosch.detekt:detekt-test:1.0.0-RC11")
-        implementation("io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0-RC11")
+        implementation("io.gitlab.arturbosch.detekt:detekt-core:1.0.0-RC12")
+        implementation("io.gitlab.arturbosch.detekt:detekt-api:1.0.0-RC12")
+        implementation("io.gitlab.arturbosch.detekt:detekt-test:1.0.0-RC12")
+        implementation("io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0-RC12")
 
         implementation("org.quicktheories:quicktheories:0.25")
 	}
@@ -209,7 +209,7 @@ subprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
     dependencies {
-        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0-RC11")
+        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0-RC12")
     }
 
     tasks.named<Detekt>("detekt") {
