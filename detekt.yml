@@ -11,7 +11,6 @@ test-pattern: # Configure exclusions for test sources
     - 'comments'
   exclude-rules:
     - 'NamingRules'
-    - 'WildcardImport'
     - 'MagicNumber'
     - 'MaxLineLength'
     - 'LateinitUsage'
@@ -427,7 +426,7 @@ style:
     active: true
     imports: 'com.sun'
   ForbiddenVoid:
-    active: false
+    active: true
   FunctionOnlyReturningConstant:
     active: false
     ignoreOverridableFunction: true
@@ -500,7 +499,7 @@ style:
   UnnecessaryInheritance:
     active: true
   UnnecessaryLet:
-    active: false
+    active: true
   UnnecessaryParentheses:
     active: false
   UntilInsteadOfRangeTo:
@@ -508,9 +507,9 @@ style:
   UnusedImports:
     active: true
   UnusedPrivateClass:
-    active: false
+    active: true
   UnusedPrivateMember:
-    active: false
+    active: true
     allowedNames: "(_|ignored|expected|serialVersionUID)"
   UseDataClass:
     active: true

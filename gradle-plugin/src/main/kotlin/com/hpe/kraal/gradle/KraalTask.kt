@@ -22,7 +22,6 @@ import com.hpe.kraal.debug
 import com.hpe.kraal.removeIrreducibleLoops
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
@@ -45,8 +44,7 @@ import javax.inject.Inject
  * GraalVM.
  */
 @CacheableTask
-open class KraalTask @Inject constructor(private val exec: WorkerExecutor, private val objFactory: ObjectFactory) :
-    DefaultTask() {
+open class KraalTask @Inject constructor(private val exec: WorkerExecutor) : DefaultTask() {
 
     /**
      * All input files are copied to the [outputDirectory], and any classes are processed.
