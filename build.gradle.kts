@@ -150,6 +150,7 @@ allprojects {
 
             version(delegateClosureOf<BintrayExtension.VersionConfig> {
                 name = "${project.version}"
+                vcsTag = "v$name"
                 released = "${Date()}"
 
                 gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
