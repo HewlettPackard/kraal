@@ -19,13 +19,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.3.11"
-    id("com.hpe.kraal") version "0.0.7"
+    id("com.hpe.kraal") version "0.0.8"
 }
 
 description = "Kraal example with Ktor"
 
 group = "com.hpe.kraal"
-version = "0.0.7"
+version = "0.0.8"
 
 repositories {
     jcenter()
