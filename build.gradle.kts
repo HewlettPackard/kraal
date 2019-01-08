@@ -159,6 +159,13 @@ allprojects {
                 gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
                     sign = true
                 })
+
+                mavenCentralSync(delegateClosureOf<BintrayExtension.MavenCentralSyncConfig> {
+                    sync = true
+                    user = "${properties["sonatype.publish.user"]}"
+                    password = "${properties["sonatype.publish.password"]}"
+                    close = "1"
+                })
             })
         })
     }
