@@ -34,7 +34,7 @@ description = "Kraal parent module - Kraal enables the use of Kotlin coroutines 
 
 allprojects {
     group = "com.hpe.kraal"
-    version = "0.0.8"
+    version = "0.0.9"
 
     repositories {
         jcenter()

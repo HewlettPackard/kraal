@@ -24,7 +24,7 @@ Until then, Kraal allows the usage of these two technologies together.
 Using the Kotlin DSL:
 
     plugins {
-        id("com.hpe.kraal") version "0.0.8"
+        id("com.hpe.kraal") version "0.0.9"
     }
 
 The Kraal Gradle plugin by default takes all jars produced by the build and their runtime dependencies,
