@@ -108,35 +108,40 @@ subprojects {
             groupId = "${this@subprojects.group}"
             artifactId = this@subprojects.name
             version = "${this@subprojects.version}"
-            pom.withXml {
-                asNode().apply {
-                    appendNode("description", "${this@subprojects.description}")
-                    appendNode("name", "kraal")
-                    appendNode("url", "https://github.com/HewlettPackard/kraal")
-
-                    val license = appendNode("licenses").appendNode("license")
-                    license.appendNode("name", "MIT")
-                    license.appendNode("url", "https://opensource.org/licenses/MIT")
-                    license.appendNode("distribution", "repo")
-
-                    val developer = appendNode("developers").appendNode("developer")
-                    developer.appendNode("id", "Brad Newman")
-                    developer.appendNode("name", "Brad Newman")
-                    developer.appendNode("organization", "Hewlett Packard Enterprise")
-                    developer.appendNode("organizationUrl", "https://hpe.com")
-
-                    appendNode("scm").appendNode("url", "https://github.com/HewlettPackard/kraal")
+            pom {
+                name.set("kraal")
+                description.set(this@subprojects.description)
+                url.set("https://github.com/HewlettPackard/kraal")
+                licenses {
+                    license {
+                        name.set("MIT")
+                        url.set("https://opensource.org/licenses/MIT")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("bradnewman")
+                        name.set("Brad Newman")
+                        organization.set("Hewlett Packard Enterprise")
+                        organizationUrl.set("https://hpe.com")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/HewlettPackard/kraal")
                 }
             }
         }
     }
 
+    bintray.setPublications("KraalPublication")
+}
+
+allprojects {
+
     bintray {
         user = "${properties["bintray.publish.user"]}"
         key = "${properties["bintray.publish.key"]}"
-
-        setPublications("KraalPublication")
-
+        
         pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
             repo = "kraal"
             name = "kraal"
@@ -153,9 +158,7 @@ subprojects {
             })
         })
     }
-}
 
-allprojects {
     dependencies.constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.11")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.11")
