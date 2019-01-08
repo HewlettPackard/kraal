@@ -1,5 +1,6 @@
 # Kraal #
 
+[ ![Download](https://api.bintray.com/packages/bradnewman/kraal/kraal/images/download.svg) ](https://bintray.com/bradnewman/kraal/kraal/_latestVersion)
 [![Build Status](https://travis-ci.org/HewlettPackard/kraal.svg?branch=master)](https://travis-ci.org/HewlettPackard/kraal)
 
 Attempting to use [GraalVM](https://www.graalvm.org/) and [Kotlin](http://kotlinlang.org/)
@@ -23,7 +24,7 @@ Until then, Kraal allows the usage of these two technologies together.
 Using the Kotlin DSL:
 
     plugins {
-        id("com.hpe.kraal") version "0.0.1"
+        id("com.hpe.kraal") version "0.0.8"
     }
 
 The Kraal Gradle plugin by default takes all jars produced by the build and their runtime dependencies,
