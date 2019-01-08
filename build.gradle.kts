@@ -134,6 +134,9 @@ subprojects {
     }
 
     bintray.setPublications("KraalPublication")
+    tasks.named("bintrayUpload").configure {
+        dependsOn("assemble", "generatePomFileForKraalPublicationPublication")
+    }
 }
 
 allprojects {
