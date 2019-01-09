@@ -14,6 +14,8 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+description = "Kraal enables the use of Kotlin coroutines and GraalVM native-image together"
+
 dependencies {
     implementation("org.slf4j:slf4j-api")
     implementation("org.ow2.asm:asm")

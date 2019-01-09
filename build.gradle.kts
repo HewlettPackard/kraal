@@ -44,9 +44,6 @@ allprojects {
 
 subprojects {
     apply(plugin = "kotlin")
-    apply(plugin = "org.jetbrains.dokka")
-    apply(plugin = "maven-publish")
-    apply(plugin = "com.jfrog.bintray")
 
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
@@ -55,11 +52,6 @@ subprojects {
             // disable -Werror with: ./gradlew -PwarningsAsErrors=false
             allWarningsAsErrors = project.findProperty("warningsAsErrors") != "false"
         }
-    }
-
-    tasks.withType<JavaCompile>().configureEach {
-        sourceCompatibility = "1.8"
-        targetCompatibility = "1.8"
     }
 
     tasks.withType<Test>().configureEach {
@@ -75,6 +67,15 @@ subprojects {
             showStackTraces = true
         }
     }
+}
+
+val notMavenPublished = setOf("gradle-plugin")
+
+configure(subprojects.filter { it.name !in notMavenPublished }) {
+    apply(plugin = "org.jetbrains.dokka")
+    apply(plugin = "maven-publish")
+    apply(plugin = "com.jfrog.bintray")
+
 
     tasks.withType(DokkaTask::class.java) {
         // lots of Can't find node warnings, possibly: https://github.com/Kotlin/dokka/issues/319
@@ -105,12 +106,12 @@ subprojects {
             from(components["java"])
             artifact(sourcesJar)
             artifact(javadocJar)
-            groupId = "${this@subprojects.group}"
-            artifactId = this@subprojects.name
-            version = "${this@subprojects.version}"
+            groupId = "${this@configure.group}"
+            artifactId = this@configure.name
+            version = "${this@configure.version}"
+
             pom {
-                name.set("kraal")
-                description.set(this@subprojects.description)
+                name.set(this@configure.name)
                 url.set("https://github.com/HewlettPackard/kraal")
                 licenses {
                     license {
@@ -130,6 +131,13 @@ subprojects {
                     url.set("https://github.com/HewlettPackard/kraal")
                 }
             }
+            // doesn't work in above block for some reason:
+            // description.set(this@subprojects.description)
+            pom.withXml {
+                asNode().apply {
+                    appendNode("description", this@configure.description)
+                }
+            }
         }
     }
 
@@ -139,12 +147,11 @@ subprojects {
     }
 }
 
-allprojects {
-
+configure(allprojects.filter { it.name !in notMavenPublished }) {
     bintray {
         user = "${properties["bintray.publish.user"]}"
         key = "${properties["bintray.publish.key"]}"
-        
+
         pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
             repo = "kraal"
             name = "kraal"
@@ -169,7 +176,9 @@ allprojects {
             })
         })
     }
+}
 
+allprojects {
     dependencies.constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.11")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.11")
@@ -210,11 +219,6 @@ allprojects {
     dependencies {
         // Maven BOMs create constraints when depended on *outside the constraints section*
         implementation(enforcedPlatform("org.junit:junit-bom:5.3.2"))
-    }
-
-    configurations.all {
-        // We use junit5, not junit4
-        exclude("junit", "junit")
     }
 }
 

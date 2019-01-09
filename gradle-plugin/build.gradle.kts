@@ -14,6 +14,8 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+description = "Gradle plugin for Kraal: Kraal enables the use of Kotlin coroutines and GraalVM native-image together"
+
 plugins {
     id("java-gradle-plugin")
     id("com.gradle.plugin-publish") version "0.10.0"
