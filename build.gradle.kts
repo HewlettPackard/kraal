@@ -69,13 +69,10 @@ subprojects {
     }
 }
 
-val notMavenPublished = setOf("gradle-plugin")
-
-configure(subprojects.filter { it.name !in notMavenPublished }) {
+subprojects {
     apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "maven-publish")
     apply(plugin = "com.jfrog.bintray")
-
 
     tasks.withType(DokkaTask::class.java) {
         // lots of Can't find node warnings, possibly: https://github.com/Kotlin/dokka/issues/319
@@ -106,12 +103,12 @@ configure(subprojects.filter { it.name !in notMavenPublished }) {
             from(components["java"])
             artifact(sourcesJar)
             artifact(javadocJar)
-            groupId = "${this@configure.group}"
-            artifactId = this@configure.name
-            version = "${this@configure.version}"
+            groupId = "${this@subprojects.group}"
+            artifactId = this@subprojects.name
+            version = "${this@subprojects.version}"
 
             pom {
-                name.set(this@configure.name)
+                name.set(this@subprojects.name)
                 url.set("https://github.com/HewlettPackard/kraal")
                 licenses {
                     license {
@@ -135,7 +132,7 @@ configure(subprojects.filter { it.name !in notMavenPublished }) {
             // description.set(this@subprojects.description)
             pom.withXml {
                 asNode().apply {
-                    appendNode("description", this@configure.description)
+                    appendNode("description", this@subprojects.description)
                 }
             }
         }
@@ -147,7 +144,7 @@ configure(subprojects.filter { it.name !in notMavenPublished }) {
     }
 }
 
-configure(allprojects.filter { it.name !in notMavenPublished }) {
+allprojects {
     bintray {
         user = "${properties["bintray.publish.user"]}"
         key = "${properties["bintray.publish.key"]}"
