@@ -24,7 +24,7 @@ Until then, Kraal allows the usage of these two technologies together.
 Using the Kotlin DSL:
 
     plugins {
-        id("com.hpe.kraal") version "0.0.10"
+        id("com.hpe.kraal") version "0.0.11"
     }
 
 The Kraal Gradle plugin by default takes all jars produced by the build and their runtime dependencies,
@@ -64,7 +64,7 @@ Use the `exec-maven-plugin` to execute the Kraal driver application `com.hpe.kra
             <dependency>
                 <groupId>com.hpe.kraal</groupId>
                 <artifactId>kraal</artifactId>
-                <version>0.0.10</version>
+                <version>0.0.11</version>
             </dependency>
         </dependencies>
         <executions>
