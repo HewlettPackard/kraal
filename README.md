@@ -50,8 +50,38 @@ This can be used as a convenient way to create a "fat jar" of the processed clas
         }
     }
 
-See the `example` directory for a complete working example with [Ktor](https://ktor.io/) and GraalVM.
+See the [example](https://github.com/HewlettPackard/kraal/tree/master/example) directory for a complete working example with [Ktor](https://ktor.io/) and GraalVM.
 
 ## Maven ##
 
-Not documented yet.
+Use the `exec-maven-plugin` to execute the Kraal driver application `com.hpe.kraal.MainKt`:
+
+    <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <dependencies>
+            <dependency>
+                <groupId>com.hpe.kraal</groupId>
+                <artifactId>kraal</artifactId>
+                <version>0.0.9</version>
+            </dependency>
+        </dependencies>
+        <executions>
+            <execution>
+                <goals>
+                    <goal>java</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                    <mainClass>com.hpe.kraal.MainKt</mainClass>
+                    <arguments>
+                        <argument>${project.build.directory}/${project.build.finalName}.${project.packaging}</argument>
+                    </arguments>
+                    <includePluginDependencies>true</includePluginDependencies>
+                </configuration>
+            </execution>
+        </executions>
+    </plugin>
+
+See the [maven-example](https://github.com/HewlettPackard/kraal/tree/master/maven-example) directory for a complete working example with [Ktor](https://ktor.io/) and GraalVM.

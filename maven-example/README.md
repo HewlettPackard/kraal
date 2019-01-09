@@ -1,20 +1,20 @@
 # Kraal Example #
 
-An example of using Kraal with Gradle to build a native image of a simple Ktor webapp.
+An example of using Kraal with Maven to build a native image of a simple Ktor webapp.
 
 ## Building ##
 
 With GraalVM installed locally:
 
-    ./gradlew build
+    mvn install
     native-image \
         --static \
         --report-unsupported-elements-at-runtime \
-        -jar build/fatjar/example.jar
-    ./example
+        -jar target/maven-example.jar
+    ./maven-example
 
 Or, using a Docker container with GraalVM and building the example webapp into a 26MB Docker image:
 
-    ./gradlew build
-    docker build -f Dockerfile -t kraal-example build/fatjar
+    mvn install
+    docker build -f Dockerfile -t kraal-example target
     docker run --rm -P kraal-example
