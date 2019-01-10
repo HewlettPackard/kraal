@@ -26,4 +26,4 @@ RUN native-image \
 FROM scratch
 EXPOSE 8080
 COPY --from=build maven-example .
-CMD ["/example"]
+CMD ["/maven-example"]
