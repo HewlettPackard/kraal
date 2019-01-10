@@ -25,7 +25,7 @@ plugins {
 description = "Kraal example with Ktor"
 
 group = "com.hpe.kraal"
-version = 0.0.12" // kraal version - for makeRelease.sh
+version = "0.0.12" // kraal version - for makeRelease.sh
 
 repositories {
     jcenter()

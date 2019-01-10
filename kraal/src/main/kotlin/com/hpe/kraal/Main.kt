@@ -18,6 +18,7 @@ package com.hpe.kraal
 
 import java.net.URLClassLoader
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
@@ -30,36 +31,20 @@ fun main(args: Array<String>) {
     if (args.singleOrNull() in setOf("--help", "-h")) usage()
 
     val inputFiles = args.map { Paths.get(it) }
-
-    val outputFiles = inputFiles.map { file ->
-        Files.createTempFile(
-            file.toAbsolutePath().parent,
-            file.fileName.toString(),
-            ".${file.fileName.toString().substringAfterLast('.', ".tmp")}"
-        )
-    }
+    val outputFiles = mutableListOf<Path?>()
 
     val inputUrls = inputFiles.map { it.toUri().toURL() }.toTypedArray()
-    val classloader = URLClassLoader(inputUrls)
 
     try {
-        classloader.use {
-            for ((file, output) in inputFiles.zip(outputFiles)) {
-                val name = file.fileName.toString()
-                if (name.endsWith(".jar") || name.endsWith(".class")) {
-                    Files.copy(file, output, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES)
-                    removeIrreducibleLoops(output, classloader)
-                } else {
-                    Files.delete(output)
-                }
+        URLClassLoader(inputUrls).use { classloader ->
+            for (file in inputFiles) {
+                outputFiles.add(processFile(file, classloader))
             }
         }
-        for ((file, output) in inputFiles.zip(outputFiles)) {
-            Files.move(output, file, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
-        }
+        updateFiles(inputFiles, outputFiles)
     } finally {
-        for (file in outputFiles) {
-            Files.deleteIfExists(file)
+        for (temp in outputFiles) {
+            Files.deleteIfExists(temp)
         }
     }
 }
@@ -71,4 +56,34 @@ private fun usage(): Nothing {
                 "Any .jar or .class files are modified **in place** to remove irreducible loops.\n\n" +
                 "Usage: java com.hpe.kraal.MainKt <file>..."
     )
+}
+
+private fun processFile(file: Path, classloader: ClassLoader): Path? {
+    val name = file.fileName.toString()
+    if (name.endsWith(".jar") || name.endsWith(".class")) {
+        val output = Files.createTempFile(
+            file.toAbsolutePath().parent,
+            name,
+            ".${file.fileName.toString().substringAfterLast('.', ".tmp")}"
+        )
+        try {
+            Files.copy(file, output, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES)
+            if (removeIrreducibleLoops(output, classloader)) {
+                return output
+            }
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            Files.delete(output)
+            throw e
+        }
+        Files.delete(output)
+    }
+    return null
+}
+
+private fun updateFiles(inputFiles: List<Path>, outputFiles: List<Path?>) {
+    for ((file, output) in inputFiles.zip(outputFiles)) {
+        if (output != null) {
+            Files.move(output, file, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
+        }
+    }
 }

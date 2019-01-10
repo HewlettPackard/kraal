@@ -43,14 +43,15 @@ fun removeIrreducibleLoops(classNode: ClassNode): Boolean {
 
 /**
  * Process the .jar or .class [file] to remove irreducible loops in the instruction lists of each method.  Class files
- * are overwritten if they contained irreducible loops, and the contents of jars are updated in-place.
+ * are overwritten if they contained irreducible loops, and the contents of jars are updated in-place.  Returns
+ * true if the given file was modified.
  *
  * If the class has related types (e.g. supertypes) that cannot be loaded by the current thread's context classloader,
  * then a [classloader] that can must be specified.
  */
-fun removeIrreducibleLoops(file: Path, classloader: ClassLoader = Thread.currentThread().contextClassLoader) {
+fun removeIrreducibleLoops(file: Path, classloader: ClassLoader = Thread.currentThread().contextClassLoader): Boolean {
     if (file.toString().endsWith(".class")) {
-        processClassFile(file, classloader)
+        return processClassFile(file, classloader)
     } else if (file.toString().endsWith(".jar")) {
         log.info { "Processing jar file $file" }
 
@@ -59,20 +60,25 @@ fun removeIrreducibleLoops(file: Path, classloader: ClassLoader = Thread.current
                 entry.toString().endsWith(".class") && !Files.isDirectory(entry)
             }
 
+            var modified = false
             for (classFile in classes) {
-                processClassFile(classFile, classloader)
+                modified = processClassFile(classFile, classloader) || modified
             }
+            return modified
         }
     } else {
         log.debug { "Not processing input file $file" }
+        return false
     }
 }
 
-private fun processClassFile(classFile: Path, classloader: ClassLoader) {
+private fun processClassFile(classFile: Path, classloader: ClassLoader): Boolean {
     log.info { "Processing $classFile" }
     val classNode = readClassFile(classFile)
     if (removeIrreducibleLoops(classNode)) {
         classNode.writeToFile(classFile, classloader)
         log.info { "Updated $classFile" }
+        return true
     }
+    return false
 }
