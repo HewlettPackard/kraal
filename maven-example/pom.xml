@@ -19,7 +19,7 @@
 
     <groupId>com.hpe.kraal</groupId>
     <artifactId>maven-example</artifactId>
-    <version>0.0.12</version> <!-- kraal version - for makeRelease.sh -->
+    <version>0.0.13</version> <!-- kraal version - for makeRelease.sh -->
     <description>Example of using Kraal with Maven</description>
 
     <properties>
@@ -106,7 +106,7 @@
                     <dependency>
                         <groupId>com.hpe.kraal</groupId>
                         <artifactId>kraal</artifactId>
-                        <version>0.0.12</version> <!-- kraal version - for makeRelease.sh -->
+                        <version>0.0.13</version> <!-- kraal version - for makeRelease.sh -->
                     </dependency>
                 </dependencies>
                 <executions>
