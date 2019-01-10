@@ -66,6 +66,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- build a "fat" jar with our app and all of its dependencies -->
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.1</version>
@@ -96,6 +97,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- then run Kraal on our "fat" jar -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

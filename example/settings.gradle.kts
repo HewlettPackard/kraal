@@ -16,4 +16,5 @@
  */
 rootProject.name = "kraal-example"
 
+// use kraal and kraal gradle plugin from working copy
 includeBuild("..")

@@ -27,14 +27,10 @@ description = "Kraal example with Ktor"
 group = "com.hpe.kraal"
 version = "0.0.12" // kraal version - for makeRelease.sh
 
-repositories {
-    jcenter()
-    mavenCentral()
-}
-
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
+        // need use-experimental for Ktor CIO
         freeCompilerArgs += listOf("-Xuse-experimental=kotlin.Experimental", "-progressive")
         // disable -Werror with: ./gradlew -PwarningsAsErrors=false
         allWarningsAsErrors = project.findProperty("warningsAsErrors") != "false"
@@ -46,6 +42,7 @@ dependencies {
     implementation("io.ktor:ktor-server-cio:1.0.1")
 }
 
+// create a "fat" jar with application and all dependencies processed by Kraal
 val fatjar by tasks.creating(Jar::class) {
 
     from(kraal.outputZipTrees) {

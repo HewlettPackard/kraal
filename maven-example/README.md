@@ -4,7 +4,12 @@ An example of using Kraal with Maven to build a native image of a simple Ktor we
 
 ## Building ##
 
-With GraalVM installed locally:
+If using the unreleased version of Kraal (i.e. building master), first build Kraal from the parent directory:
+
+    ./gradlew publishToMavenLocal
+    cd maven-example
+
+Then, with GraalVM installed locally:
 
     mvn install
     native-image \
