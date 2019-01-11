@@ -185,8 +185,8 @@ allprojects {
         implementation("org.jetbrains.kotlin:kotlin-test-common:1.3.11")
         implementation("org.jetbrains.kotlin:kotlin-test-junit5:1.3.11")
 
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.0.1")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.1.0")
 
         implementation("org.ow2.asm:asm:7.0")
         implementation("org.ow2.asm:asm-analysis:7.0")
@@ -196,14 +196,15 @@ allprojects {
         implementation("org.slf4j:slf4j-api:1.7.25")
         implementation("org.slf4j:slf4j-simple:1.7.25")
 
-        implementation("io.ktor:ktor-server-core:1.0.1")
-        implementation("io.ktor:ktor-jackson:1.0.1")
-        implementation("io.ktor:ktor-server-netty:1.0.1")
-        implementation("io.ktor:ktor-server-jetty:1.0.1")
-        implementation("io.ktor:ktor-server-cio:1.0.1")
-        implementation("io.ktor:ktor-client-core-jvm:1.0.1")
-        implementation("io.ktor:ktor-client-apache:1.0.1")
-        implementation("io.ktor:ktor-server-test-host:1.0.1")
+        implementation("io.ktor:ktor-server-core:1.1.1")
+        implementation("io.ktor:ktor-jackson:1.1.1")
+        implementation("io.ktor:ktor-server-netty:1.1.1")
+        implementation("io.ktor:ktor-server-jetty:1.1.1")
+        implementation("io.ktor:ktor-server-cio:1.1.1")
+        implementation("io.ktor:ktor-client-core-jvm:1.1.1")
+        implementation("io.ktor:ktor-client-apache:1.1.1")
+        implementation("io.ktor:ktor-server-test-host:1.1.1")
+        implementation("io.ktor:ktor-utils:1.1.1")
 
         implementation("io.gitlab.arturbosch.detekt:detekt-core:1.0.0-RC12")
         implementation("io.gitlab.arturbosch.detekt:detekt-api:1.0.0-RC12")
@@ -211,7 +212,7 @@ allprojects {
         implementation("io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0-RC12")
 
         implementation("org.quicktheories:quicktheories:0.25")
-	}
+    }
 
     dependencies {
         // Maven BOMs create constraints when depended on *outside the constraints section*

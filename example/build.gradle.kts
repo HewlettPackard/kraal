@@ -22,6 +22,10 @@ plugins {
     id("com.hpe.kraal") version "0.0.13" // kraal version - for makeRelease.sh
 }
 
+repositories {
+    jcenter()
+}
+
 description = "Kraal example with Ktor"
 
 group = "com.hpe.kraal"
@@ -39,7 +43,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
 dependencies {
     implementation("org.slf4j:slf4j-simple:1.7.25")
-    implementation("io.ktor:ktor-server-cio:1.0.1")
+    implementation("io.ktor:ktor-server-cio:1.1.1")
 }
 
 // create a "fat" jar with application and all dependencies processed by Kraal

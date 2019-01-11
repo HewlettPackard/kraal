@@ -45,16 +45,6 @@ class ThirdPartyClassTest {
     }
 
     @Test
-    fun `removeIrreducibleLoops PipelineKt$startConnectionPipeline$2$outputsActor$1`() {
-        verifyProcessClass("io.ktor.http.cio.PipelineKt\$startConnectionPipeline\$2\$outputsActor\$1")
-    }
-
-    @Test
-    fun `removeIrreducibleLoops PipelineKt$startConnectionPipeline$2`() {
-        verifyProcessClass("io.ktor.http.cio.PipelineKt\$startConnectionPipeline\$2")
-    }
-
-    @Test
     fun `removeIrreducibleLoops Sessions$Feature$install$1`() {
         verifyProcessClass("io.ktor.sessions.Sessions\$Feature\$install\$1")
     }
