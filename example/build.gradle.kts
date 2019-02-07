@@ -18,7 +18,7 @@ import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.11"
+    kotlin("jvm") version "1.3.21"
     id("com.hpe.kraal") version "0.0.14" // kraal version - for makeRelease.sh
 }
 
@@ -34,8 +34,7 @@ version = "0.0.14" // kraal version - for makeRelease.sh
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
-        // need use-experimental for Ktor CIO
-        freeCompilerArgs += listOf("-Xuse-experimental=kotlin.Experimental", "-progressive")
+        freeCompilerArgs += listOf("-progressive")
         // disable -Werror with: ./gradlew -PwarningsAsErrors=false
         allWarningsAsErrors = project.findProperty("warningsAsErrors") != "false"
     }
@@ -43,7 +42,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
 dependencies {
     implementation("org.slf4j:slf4j-simple:1.7.25")
-    implementation("io.ktor:ktor-server-cio:1.1.1")
+    implementation("io.ktor:ktor-server-jetty:1.1.2")
 }
 
 // create a "fat" jar with application and all dependencies processed by Kraal

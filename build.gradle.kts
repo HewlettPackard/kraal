@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Date
 
 plugins {
-    kotlin("jvm") version "1.3.11"
+    kotlin("jvm") version "1.3.21"
     id("org.jetbrains.dokka") version "0.9.17"
     id("com.jfrog.bintray") version "1.8.4"
     id("io.gitlab.arturbosch.detekt") version "1.0.0-RC12"
@@ -177,16 +177,8 @@ allprojects {
 
 allprojects {
     dependencies.constraints {
-        implementation("org.jetbrains.kotlin:kotlin-stdlib:1.3.11")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.11")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11")
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.3.11")
-        implementation("org.jetbrains.kotlin:kotlin-test:1.3.11")
-        implementation("org.jetbrains.kotlin:kotlin-test-common:1.3.11")
-        implementation("org.jetbrains.kotlin:kotlin-test-junit5:1.3.11")
-
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.1.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.1.1")
 
         implementation("org.ow2.asm:asm:7.0")
         implementation("org.ow2.asm:asm-analysis:7.0")
@@ -196,15 +188,15 @@ allprojects {
         implementation("org.slf4j:slf4j-api:1.7.25")
         implementation("org.slf4j:slf4j-simple:1.7.25")
 
-        implementation("io.ktor:ktor-server-core:1.1.1")
-        implementation("io.ktor:ktor-jackson:1.1.1")
-        implementation("io.ktor:ktor-server-netty:1.1.1")
-        implementation("io.ktor:ktor-server-jetty:1.1.1")
-        implementation("io.ktor:ktor-server-cio:1.1.1")
-        implementation("io.ktor:ktor-client-core-jvm:1.1.1")
-        implementation("io.ktor:ktor-client-apache:1.1.1")
-        implementation("io.ktor:ktor-server-test-host:1.1.1")
-        implementation("io.ktor:ktor-utils:1.1.1")
+        implementation("io.ktor:ktor-server-core:1.1.2")
+        implementation("io.ktor:ktor-jackson:1.1.2")
+        implementation("io.ktor:ktor-server-netty:1.1.2")
+        implementation("io.ktor:ktor-server-jetty:1.1.2")
+        implementation("io.ktor:ktor-server-cio:1.1.2")
+        implementation("io.ktor:ktor-client-core-jvm:1.1.2")
+        implementation("io.ktor:ktor-client-apache:1.1.2")
+        implementation("io.ktor:ktor-server-test-host:1.1.2")
+        implementation("io.ktor:ktor-utils:1.1.2")
 
         implementation("io.gitlab.arturbosch.detekt:detekt-core:1.0.0-RC12")
         implementation("io.gitlab.arturbosch.detekt:detekt-api:1.0.0-RC12")
@@ -216,7 +208,8 @@ allprojects {
 
     dependencies {
         // Maven BOMs create constraints when depended on *outside the constraints section*
-        implementation(enforcedPlatform("org.junit:junit-bom:5.3.2"))
+        implementation(platform("org.junit:junit-bom:5.3.2"))
+        implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.3.21"))
     }
 }
 

@@ -15,7 +15,7 @@
 
 # docker build -f Dockerfile -t kraal-example target
 
-FROM findepi/graalvm:1.0.0-rc8-native AS build
+FROM findepi/graalvm:1.0.0-rc12-native AS build
 COPY maven-example.jar .
 RUN native-image \
     --verbose \
