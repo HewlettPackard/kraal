@@ -22,14 +22,15 @@ import io.ktor.http.ContentType
 import io.ktor.response.respondText
 import io.ktor.routing.get
 import io.ktor.routing.routing
-import io.ktor.server.jetty.Jetty
+import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
 import io.ktor.util.KtorExperimentalAPI
 
+@UseExperimental(KtorExperimentalAPI::class)
 fun main(args: Array<String>) {
     Result.toString() // for https://github.com/oracle/graal/issues/783 / https://youtrack.jetbrains.com/issue/KT-28050
 
-    val server = embeddedServer(Jetty, 8080, module = Application::example)
+    val server = embeddedServer(CIO, 8080, module = Application::example)
     server.start(wait = true)
 }
 

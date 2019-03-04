@@ -34,7 +34,8 @@ version = "0.0.15" // kraal version - for makeRelease.sh
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs += listOf("-progressive")
+        // need use-experimental for Ktor CIO
+        freeCompilerArgs += listOf("-Xuse-experimental=kotlin.Experimental", "-progressive")
         // disable -Werror with: ./gradlew -PwarningsAsErrors=false
         allWarningsAsErrors = project.findProperty("warningsAsErrors") != "false"
     }
@@ -42,7 +43,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
 dependencies {
     implementation("org.slf4j:slf4j-simple:1.7.25")
-    implementation("io.ktor:ktor-server-jetty:1.1.2")
+    implementation("io.ktor:ktor-server-cio:1.1.2")
 }
 
 // create a "fat" jar with application and all dependencies processed by Kraal
