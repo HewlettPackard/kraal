@@ -28,8 +28,6 @@ import io.ktor.util.KtorExperimentalAPI
 
 @UseExperimental(KtorExperimentalAPI::class)
 fun main(args: Array<String>) {
-    Result.toString() // for https://github.com/oracle/graal/issues/783 / https://youtrack.jetbrains.com/issue/KT-28050
-
     val server = embeddedServer(CIO, 8080, module = Application::example)
     server.start(wait = true)
 }
