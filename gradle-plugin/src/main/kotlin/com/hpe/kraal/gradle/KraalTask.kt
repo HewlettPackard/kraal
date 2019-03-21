@@ -51,7 +51,7 @@ open class KraalTask @Inject constructor(private val exec: WorkerExecutor) : Def
      */
     @PathSensitive(PathSensitivity.NAME_ONLY)
     @InputFiles
-    var input: ConfigurableFileCollection = project.layout.configurableFiles()
+    var input: ConfigurableFileCollection = project.objects.fileCollection()
 
     /**
      * Destination directory, where all [input] files will be copied.

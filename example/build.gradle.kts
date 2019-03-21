@@ -42,8 +42,8 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
-    implementation("org.slf4j:slf4j-simple:1.7.25")
-    implementation("io.ktor:ktor-server-cio:1.1.2")
+    implementation("org.slf4j:slf4j-simple:1.7.26")
+    implementation("io.ktor:ktor-server-cio:1.1.3")
 }
 
 // create a "fat" jar with application and all dependencies processed by Kraal
@@ -59,8 +59,8 @@ val fatjar by tasks.creating(Jar::class) {
         attributes("Main-Class" to "com.hpe.kraal.example.AppKt")
     }
 
-    destinationDir = project.buildDir.resolve("fatjar")
-    archiveName = "example.jar"
+    destinationDirectory.set(project.buildDir.resolve("fatjar"))
+    archiveFileName.set("example.jar")
 }
 
 tasks.named("assemble").configure {

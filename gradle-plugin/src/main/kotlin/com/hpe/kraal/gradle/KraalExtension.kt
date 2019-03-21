@@ -26,7 +26,7 @@ open class KraalExtension(private val project: Project) {
     /**
      * Input .jar and .class files to process.  Defaults to the runtimeClasspath and the output of the "jar" task.
      */
-    var input: ConfigurableFileCollection = project.layout.configurableFiles()
+    var input: ConfigurableFileCollection = project.objects.fileCollection()
         .from(project.configurations.named("runtimeClasspath"))
         .from(project.tasks.named("jar"))
 

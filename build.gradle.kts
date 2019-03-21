@@ -14,6 +14,7 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.jfrog.bintray.gradle.BintrayExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -24,9 +25,11 @@ import java.util.Date
 
 plugins {
     kotlin("jvm") version "1.3.21"
-    id("org.jetbrains.dokka") version "0.9.17"
+    id("org.jetbrains.dokka") version "0.9.18"
     id("com.jfrog.bintray") version "1.8.4"
     id("io.gitlab.arturbosch.detekt") version "1.0.0-RC12"
+    id("se.patrikerdes.use-latest-versions") version "0.2.9"
+    id("com.github.ben-manes.versions") version "0.21.0"
     `maven-publish`
 }
 
@@ -83,13 +86,13 @@ subprojects {
 
     val sourcesJar by tasks.creating(Jar::class) {
         dependsOn("classes")
-        classifier = "sources"
+        archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
     }
 
     val javadocJar by tasks.creating(Jar::class) {
         dependsOn("dokka")
-        classifier = "javadoc"
+        archiveClassifier.set("javadoc")
         from(buildDir.resolve("javadoc"))
     }
 
@@ -180,35 +183,35 @@ allprojects {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.1.1")
 
-        implementation("org.ow2.asm:asm:7.0")
-        implementation("org.ow2.asm:asm-analysis:7.0")
-        implementation("org.ow2.asm:asm-tree:7.0")
-        implementation("org.ow2.asm:asm-util:7.0")
+        implementation("org.ow2.asm:asm:7.1")
+        implementation("org.ow2.asm:asm-analysis:7.1")
+        implementation("org.ow2.asm:asm-tree:7.1")
+        implementation("org.ow2.asm:asm-util:7.1")
 
-        implementation("org.slf4j:slf4j-api:1.7.25")
-        implementation("org.slf4j:slf4j-simple:1.7.25")
+        implementation("org.slf4j:slf4j-api:1.7.26")
+        implementation("org.slf4j:slf4j-simple:1.7.26")
 
-        implementation("io.ktor:ktor-server-core:1.1.2")
-        implementation("io.ktor:ktor-jackson:1.1.2")
-        implementation("io.ktor:ktor-server-netty:1.1.2")
-        implementation("io.ktor:ktor-server-jetty:1.1.2")
-        implementation("io.ktor:ktor-server-cio:1.1.2")
-        implementation("io.ktor:ktor-client-core-jvm:1.1.2")
-        implementation("io.ktor:ktor-client-apache:1.1.2")
-        implementation("io.ktor:ktor-server-test-host:1.1.2")
-        implementation("io.ktor:ktor-utils:1.1.2")
+        implementation("io.ktor:ktor-server-core:1.1.3")
+        implementation("io.ktor:ktor-jackson:1.1.3")
+        implementation("io.ktor:ktor-server-netty:1.1.3")
+        implementation("io.ktor:ktor-server-jetty:1.1.3")
+        implementation("io.ktor:ktor-server-cio:1.1.3")
+        implementation("io.ktor:ktor-client-core-jvm:1.1.3")
+        implementation("io.ktor:ktor-client-apache:1.1.3")
+        implementation("io.ktor:ktor-server-test-host:1.1.3")
+        implementation("io.ktor:ktor-utils:1.1.3")
 
         implementation("io.gitlab.arturbosch.detekt:detekt-core:1.0.0-RC12")
         implementation("io.gitlab.arturbosch.detekt:detekt-api:1.0.0-RC12")
         implementation("io.gitlab.arturbosch.detekt:detekt-test:1.0.0-RC12")
         implementation("io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0-RC12")
 
-        implementation("org.quicktheories:quicktheories:0.25")
+        implementation("org.quicktheories:quicktheories:0.26")
     }
 
     dependencies {
         // Maven BOMs create constraints when depended on *outside the constraints section*
-        implementation(platform("org.junit:junit-bom:5.3.2"))
+        implementation(platform("org.junit:junit-bom:5.4.1"))
         implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.3.21"))
     }
 }
@@ -231,6 +234,21 @@ subprojects {
     dependencies {
         implementation(kotlin("stdlib-jdk8"))
         testImplementation(kotlin("test-junit5"))
-        testImplementation("org.junit.jupiter:junit-jupiter-engine:5.3.2")
+        testImplementation("org.junit.jupiter:junit-jupiter-engine:5.4.1")
+    }
+}
+
+tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
+    resolutionStrategy {
+        componentSelection {
+            all {
+                val rejected = listOf("alpha", "beta", "rc", "cr", "m", "preview", "b", "ea")
+                    .map { qualifier -> Regex("(?i).*[.-]$qualifier[.\\d-+]*") }
+                    .any { it.matches(candidate.version) }
+                if (rejected) {
+                    reject("Release candidate")
+                }
+            }
+        }
     }
 }
