@@ -21,6 +21,9 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.Provider
 import java.io.File
 
+/**
+ * The `kraal` Gradle extension - the main interface for Gradle projects when consuming Kraal.
+ */
 open class KraalExtension(private val project: Project) {
 
     /**

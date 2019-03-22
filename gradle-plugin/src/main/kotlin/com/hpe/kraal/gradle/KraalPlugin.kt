@@ -21,6 +21,9 @@ package com.hpe.kraal.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
+/**
+ * The Kraal Gradle plugin registers the [KraalExtension] and creates a default execution of the [KraalTask].
+ */
 class KraalPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val extension = project.extensions.create("kraal", KraalExtension::class.java, project)

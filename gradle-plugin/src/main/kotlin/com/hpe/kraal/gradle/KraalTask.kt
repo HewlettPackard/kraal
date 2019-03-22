@@ -74,6 +74,9 @@ open class KraalTask @Inject constructor(private val exec: WorkerExecutor) : Def
 
     private val File.inDest get() = File(outputDirectory.get(), name)
 
+    /**
+     * Entrypoint for the task - schedule a [KraalFile] for each input file.
+     */
     @TaskAction
     fun run(inputs: IncrementalTaskInputs) {
         if (!inputs.isIncremental) {

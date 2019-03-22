@@ -115,6 +115,7 @@ internal fun MethodControlFlowGraph.resetEdges() {
 /**
  * ASM's AbstractInsnNode.toString() is not very useful.
  */
+@Suppress("LongMethod")
 private fun AbstractInsnNode.toUsefulString(index: Int) = when (opcode) {
     -1 -> {
         when (this) {
