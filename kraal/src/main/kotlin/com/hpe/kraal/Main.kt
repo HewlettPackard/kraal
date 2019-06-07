@@ -27,10 +27,19 @@ import java.nio.file.StandardCopyOption
  * **in place** to remove irreducible loops.
  */
 fun main(args: Array<String>) {
-    if (args.isEmpty()) usage()
-    if (args.singleOrNull() in setOf("--help", "-h")) usage()
+    val cli = CmdArgs(args).also(CmdArgs::parse)
 
-    val inputFiles = args.map { Paths.get(it) }
+    val excludeList = arrayListOf<String>()
+    // Packages to exclude
+    cli.findArg("--excludePackages")?.split(",")?.forEach {
+        excludeList.add(it.replace(".", "/"))
+    }
+    // Classes to exclude
+    cli.findArg("--excludeClasses")?.split(",")?.forEach {
+        excludeList.add(it)
+    }
+
+    val inputFiles = cli.fileList.map { Paths.get(it) }
     val outputFiles = mutableListOf<Path?>()
 
     val inputUrls = inputFiles.map { it.toUri().toURL() }.toTypedArray()
@@ -38,27 +47,59 @@ fun main(args: Array<String>) {
     try {
         URLClassLoader(inputUrls).use { classloader ->
             for (file in inputFiles) {
-                outputFiles.add(processFile(file, classloader))
+                outputFiles.add(processFile(file, classloader, excludeList))
             }
         }
         updateFiles(inputFiles, outputFiles)
     } finally {
-        for (temp in outputFiles) {
+        for (temp in outputFiles) if (temp != null) {
             Files.deleteIfExists(temp)
         }
     }
 }
 
-private fun usage(): Nothing {
-    // throw an exception instead of exiting the JVM so that it works better with Maven exec:java
-    error(
-        "Standalone driver application for Kraal.  Takes a list of files as input.\n" +
-                "Any .jar or .class files are modified **in place** to remove irreducible loops.\n\n" +
-                "Usage: java com.hpe.kraal.MainKt <file>..."
-    )
+/**
+ * Process command line args. Possibly kotlinx.cli might make more sense when there are more args
+ */
+private data class CmdArgs(val args: Array<String>) {
+    // List of .jar and .class files
+    var fileList = listOf<String>()
+
+    // Filter out any param starts with a '-'. Display help text if no args
+    fun parse() {
+        if (args.isEmpty()) usage()
+        if (args.singleOrNull() in setOf("--help", "-h")) usage()
+        fileList = args.filter { !it.startsWith("-") }
+    }
+
+    // If arg is found, return respective params
+    fun findArg(arg: String): String? {
+        args.forEach {
+            if (it.startsWith(arg)) {
+                return it.substring(arg.length + 1)
+            }
+        }
+        return null
+    }
 }
 
-private fun processFile(file: Path, classloader: ClassLoader): Path? {
+private fun usage(): Nothing {
+    // throw an exception instead of exiting the JVM so that it works better with Maven exec:java
+    error("""Standalone driver application for Kraal.  Takes a list of files as input.
+Any .jar or .class files are modified **in place** to remove irreducible loops.
+
+Usage: java com.hpe.kraal.MainKt <file>...
+  --excludePackages="org.pkg1,org.pkg2"     comma separated list of packages to exclude
+  --excludeClasses="class1,class2"          comma separated list of classes to exclude. ".class" is redundant
+  -h, --help                                display this help text and exit
+        """)
+}
+
+private fun processFile(
+    file: Path,
+    classloader: ClassLoader,
+    excludeList: ArrayList<String> = arrayListOf<String>()
+): Path? {
     val name = file.fileName.toString()
     if (name.endsWith(".jar") || name.endsWith(".class")) {
         val output = Files.createTempFile(
@@ -68,7 +109,7 @@ private fun processFile(file: Path, classloader: ClassLoader): Path? {
         )
         try {
             Files.copy(file, output, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES)
-            if (removeIrreducibleLoops(output, classloader)) {
+            if (removeIrreducibleLoops(output, classloader, excludeList)) {
                 return output
             }
         } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
