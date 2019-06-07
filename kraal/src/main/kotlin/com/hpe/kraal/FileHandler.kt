@@ -49,7 +49,10 @@ fun removeIrreducibleLoops(classNode: ClassNode): Boolean {
  * If the class has related types (e.g. supertypes) that cannot be loaded by the current thread's context classloader,
  * then a [classloader] that can must be specified.
  */
-fun removeIrreducibleLoops(file: Path, classloader: ClassLoader = Thread.currentThread().contextClassLoader): Boolean {
+fun removeIrreducibleLoops(
+    file: Path,
+    classloader: ClassLoader = Thread.currentThread().contextClassLoader,
+    excludeList: ArrayList<String> = arrayListOf<String>()): Boolean {
     if (file.toString().endsWith(".class")) {
         return processClassFile(file, classloader)
     } else if (file.toString().endsWith(".jar")) {
@@ -59,9 +62,11 @@ fun removeIrreducibleLoops(file: Path, classloader: ClassLoader = Thread.current
             val classes = Files.walk(zipfs.getPath("/")).filter { entry ->
                 entry.toString().endsWith(".class") && !Files.isDirectory(entry)
             }
-
+            val mClasses = classes.filter { className ->
+                excludeList.filter { pattern -> className.toString().contains(pattern) }.isEmpty()
+            }
             var modified = false
-            for (classFile in classes) {
+            for (classFile in mClasses) {
                 modified = processClassFile(classFile, classloader) || modified
             }
             return modified
